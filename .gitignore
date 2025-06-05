@@ -12,3 +12,7 @@
 # Supervisor files
 supervisord.log
 supervisord.pid
+
+.idea/
+.vscode/
+.DS_Store
