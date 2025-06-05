@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./docker/php
+    container_name: symfony_app
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    working_dir: /var/www/html
+#    command: ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+    command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  worker1:
+    build:
+      context: ./docker/php
+    container_name: symfony_worker1
+    command: php /var/www/html/bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+    depends_on:
+      - rabbitmq
+      - db
+    volumes:
+      - .:/var/www/html
+
+  worker2:
+    build:
+      context: ./docker/php
+    container_name: symfony_worker2
+    command: php /var/www/html/bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+    depends_on:
+      - rabbitmq
+      - db
+    volumes:
+      - .:/var/www/html
+
+  worker3:
+    build:
+      context: ./docker/php
+    container_name: symfony_worker3
+    command: php /var/www/html/bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+    depends_on:
+      - rabbitmq
+      - db
+    volumes:
+      - .:/var/www/html
+
+
+volumes:
+  mysql_data:

@@ -1,0 +1,11 @@
+framework:
+  messenger:
+    transports:
+      async:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        options:
+          auto_setup: true
+          exchange:
+            name: async
+    routing:
+      'App\Message\BatchProcessProductsMessage': async
