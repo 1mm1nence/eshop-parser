@@ -15,7 +15,6 @@ services:
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html/public
     working_dir: /var/www/html
-#    command: ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
     command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
   db:
@@ -46,7 +45,8 @@ services:
     build:
       context: ./docker/php
     container_name: symfony_worker1
-    command: php /var/www/html/bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+    command: php /var/www/html/bin/console messenger:consume async --no-interaction --sleep=1000 --memory-limit=128M --time-limit=3600
+    restart: always
     depends_on:
       - rabbitmq
       - db
@@ -57,7 +57,8 @@ services:
     build:
       context: ./docker/php
     container_name: symfony_worker2
-    command: php /var/www/html/bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+    command: php /var/www/html/bin/console messenger:consume async --no-interaction --memory-limit=128M --time-limit=3600
+    restart: always
     depends_on:
       - rabbitmq
       - db
@@ -68,7 +69,8 @@ services:
     build:
       context: ./docker/php
     container_name: symfony_worker3
-    command: php /var/www/html/bin/console messenger:consume async --memory-limit=128M --time-limit=3600
+    command: php /var/www/html/bin/console messenger:consume async --no-interaction --memory-limit=128M --time-limit=3600
+    restart: always
     depends_on:
       - rabbitmq
       - db

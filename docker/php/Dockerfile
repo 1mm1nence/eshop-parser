@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     curl \
     git \
-    supervisor \
     libzip-dev \
     librabbitmq-dev \
     && docker-php-ext-install pdo pdo_mysql xml zip
@@ -34,5 +33,3 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www/html
-
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
