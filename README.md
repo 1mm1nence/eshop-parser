@@ -17,5 +17,8 @@
 
 CSV файл знаходитиметься у папці var/. 
 
-Посилання на REST endpoint: http://localhost:8080/api/products
+Посилання на REST endpoint: http://localhost:8080/api/products <br>
 Посилання на трігер парсингу за допомогою веб контролера: http://localhost:8080/parse_manual (тех завдання можна трактувати по різному, зробив на всяк випадок)
+
+
+Інтерфейс RabbitMQ: http://localhost:15672
