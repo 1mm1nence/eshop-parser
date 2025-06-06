@@ -10,7 +10,12 @@
   docker exec symfony_app composer install
  ```
 
-### 3. Виконуємо команду для парсингу продуктів з розетки:
+### 3. Відтворюємо міграції:
+```bash
+  docker exec -it symfony_app php bin/console doctrine:migrations:migrate
+ ```
+
+### 4. Виконуємо команду для парсингу продуктів з розетки:
 ```bash
   docker exec symfony_app php bin/console app:parse:rozetka
  ```
